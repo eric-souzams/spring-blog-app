@@ -4,10 +4,12 @@ import io.blog.springblogapp.model.UserEntity;
 import io.blog.springblogapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -23,6 +25,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User not found in the database");
         }
 
-        return null;
+        return new User(user.get().getEmail(), user.get().getEncryptedPassword(), new ArrayList<>());
     }
 }

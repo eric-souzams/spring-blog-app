@@ -1,6 +1,7 @@
 package io.blog.springblogapp.service.impl;
 
 import io.blog.springblogapp.dto.UserDto;
+import io.blog.springblogapp.exception.AuthException;
 import io.blog.springblogapp.model.UserEntity;
 import io.blog.springblogapp.repository.UserRepository;
 import io.blog.springblogapp.service.UserService;
@@ -22,10 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDTO) {
-        Optional<UserEntity> result = userRepository.findByEmail(userDTO.getEmail());
-        if (result.isPresent()) {
-            throw new RuntimeException("Already exists a account with this email.");
-        }
+        verifyIfUserAlreadyExists(userDTO);
 
         UserEntity user = new UserEntity();
         UserDto response = new UserDto();
@@ -40,5 +38,12 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(savedUser, response);
 
         return response;
+    }
+
+    private void verifyIfUserAlreadyExists(UserDto userDTO) {
+        Optional<UserEntity> result = userRepository.findByEmail(userDTO.getEmail());
+        if (result.isPresent()) {
+            throw new AuthException("Already exists a account with this email.");
+        }
     }
 }
