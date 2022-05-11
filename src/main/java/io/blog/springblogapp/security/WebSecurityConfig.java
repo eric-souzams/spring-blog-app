@@ -1,5 +1,7 @@
 package io.blog.springblogapp.security;
 
+import io.blog.springblogapp.security.filters.AuthenticationFilter;
+import io.blog.springblogapp.security.filters.AuthorizationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -28,14 +30,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.authorizeRequests().antMatchers(HttpMethod.POST, SecurityConstants.LOGIN_URL).permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll();
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.POST, SecurityConstants.LOGIN_URL).permitAll()
+                .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll();
 
         http.authorizeRequests().anyRequest().authenticated();
 
-        http.addFilter(getAuthenticationFilter());
+        http.addFilter(getAuthenticationFilter())
+                .addFilter(new AuthorizationFilter(authenticationManager()));
     }
 
     public AuthenticationFilter getAuthenticationFilter() throws Exception {

@@ -1,7 +1,11 @@
-package io.blog.springblogapp.security;
+package io.blog.springblogapp.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.blog.springblogapp.SpringApplicationContext;
+import io.blog.springblogapp.dto.UserDto;
 import io.blog.springblogapp.model.request.UserLoginRequest;
+import io.blog.springblogapp.security.SecurityConstants;
+import io.blog.springblogapp.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AllArgsConstructor;
@@ -54,9 +58,13 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String token = Jwts.builder()
                 .setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET)
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.getSecretToken())
                 .compact();
 
+        UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
+        UserDto userDto = userService.getUser(username);
+
         response.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
+        response.addHeader("UserID", userDto.getUserId());
     }
 }

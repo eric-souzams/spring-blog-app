@@ -8,6 +8,7 @@ import io.blog.springblogapp.service.UserService;
 import io.blog.springblogapp.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,19 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(savedUser, response);
 
         return response;
+    }
+
+    @Override
+    public UserDto getUser(String email) {
+        Optional<UserEntity> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("User not found in the database");
+        }
+
+        UserDto returnUser = new UserDto();
+        BeanUtils.copyProperties(user.get(), returnUser);
+
+        return returnUser;
     }
 
     private void verifyIfUserAlreadyExists(UserDto userDTO) {
