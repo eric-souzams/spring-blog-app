@@ -2,6 +2,7 @@ package io.blog.springblogapp.service.impl;
 
 import io.blog.springblogapp.dto.UserDto;
 import io.blog.springblogapp.exception.AuthException;
+import io.blog.springblogapp.exception.UserNotFoundException;
 import io.blog.springblogapp.model.UserEntity;
 import io.blog.springblogapp.repository.UserRepository;
 import io.blog.springblogapp.service.UserService;
@@ -45,11 +46,25 @@ public class UserServiceImpl implements UserService {
     public UserDto getUser(String email) {
         Optional<UserEntity> user = userRepository.findByEmail(email);
         if (user.isEmpty()) {
-            throw new UsernameNotFoundException("User not found in the database");
+            throw new UserNotFoundException("User not found in the database");
         }
 
         UserDto returnUser = new UserDto();
         BeanUtils.copyProperties(user.get(), returnUser);
+
+        return returnUser;
+    }
+
+    @Override
+    public UserDto getUserByUserId(String userId) {
+        UserDto returnUser = new UserDto();
+
+        Optional<UserEntity> foundUser = userRepository.findByUserId(userId);
+        if (foundUser.isEmpty()) {
+            throw new UserNotFoundException("User not found in the database");
+        }
+
+        BeanUtils.copyProperties(foundUser.get(), returnUser);
 
         return returnUser;
     }

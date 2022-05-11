@@ -18,12 +18,17 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> getUser() {
-        return null;
+    public ResponseEntity<UserDetailsResponse> getUser(@PathVariable("id") String userId) {
+        UserDetailsResponse response = new UserDetailsResponse();
+
+        UserDto foundUser = userService.getUserByUserId(userId);
+        BeanUtils.copyProperties(foundUser, response);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody UserDetailsRequest request) {
+    public ResponseEntity<UserDetailsResponse> createUser(@RequestBody UserDetailsRequest request) {
         UserDetailsResponse response = new UserDetailsResponse();
         UserDto userDTO = new UserDto();
 
@@ -36,12 +41,12 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateUser() {
+    public ResponseEntity<UserDetailsResponse> updateUser() {
         return null;
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteUser() {
+    public ResponseEntity<Void> deleteUser() {
         return null;
     }
 

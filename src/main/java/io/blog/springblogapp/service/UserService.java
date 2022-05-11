@@ -6,5 +6,5 @@ public interface UserService {
 
     UserDto createUser(UserDto userDTO);
     UserDto getUser(String email);
-
+    UserDto getUserByUserId(String userId);
 }

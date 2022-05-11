@@ -1,5 +1,6 @@
 package io.blog.springblogapp.service.impl;
 
+import io.blog.springblogapp.exception.UserNotFoundException;
 import io.blog.springblogapp.model.UserEntity;
 import io.blog.springblogapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<UserEntity> user = userRepository.findByEmail(email);
         if (user.isEmpty()) {
-            throw new UsernameNotFoundException("User not found in the database");
+            throw new UserNotFoundException("Wrong credentials.");
         }
 
         return new User(user.get().getEmail(), user.get().getEncryptedPassword(), new ArrayList<>());
