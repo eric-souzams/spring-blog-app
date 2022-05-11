@@ -7,6 +7,7 @@ import io.blog.springblogapp.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public ResponseEntity<UserDetailsResponse> getUser(@PathVariable("id") String userId) {
         UserDetailsResponse response = new UserDetailsResponse();
 
@@ -27,7 +28,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PostMapping
+    @PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+                 consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public ResponseEntity<UserDetailsResponse> createUser(@RequestBody UserDetailsRequest request) {
         UserDetailsResponse response = new UserDetailsResponse();
         UserDto userDTO = new UserDto();
