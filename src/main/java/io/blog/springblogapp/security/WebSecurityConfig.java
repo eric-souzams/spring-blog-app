@@ -2,6 +2,7 @@ package io.blog.springblogapp.security;
 
 import io.blog.springblogapp.security.filters.AuthenticationFilter;
 import io.blog.springblogapp.security.filters.AuthorizationFilter;
+import io.blog.springblogapp.service.JwtService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,6 +23,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
+    private final JwtService jwtService;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
@@ -39,13 +42,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .addFilter(getAuthenticationFilter())
-                    .addFilterBefore(new AuthorizationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
+                    .addFilterBefore(new AuthorizationFilter(authenticationManager(), getJwtService()), UsernamePasswordAuthenticationFilter.class);
     }
 
     public AuthenticationFilter getAuthenticationFilter() throws Exception {
-        final AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager());
+        final AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(), getJwtService());
         authenticationFilter.setFilterProcessesUrl(SecurityConstants.LOGIN_URL);
 
         return authenticationFilter;
+    }
+
+    public JwtService getJwtService() {
+        return jwtService;
     }
 }

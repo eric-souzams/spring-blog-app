@@ -1,6 +1,7 @@
 package io.blog.springblogapp.security.filters;
 
 import io.blog.springblogapp.security.SecurityConstants;
+import io.blog.springblogapp.service.JwtService;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,8 +17,11 @@ import java.util.ArrayList;
 
 public class AuthorizationFilter extends BasicAuthenticationFilter {
 
-    public AuthorizationFilter(AuthenticationManager authenticationManager) {
+    private final JwtService jwtService;
+
+    public AuthorizationFilter(AuthenticationManager authenticationManager, JwtService jwtService) {
         super(authenticationManager);
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -45,11 +49,11 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
     private UsernamePasswordAuthenticationToken getAuthentication(String header) {
         String token = header.replace(SecurityConstants.TOKEN_PREFIX, "");
 
-        String user = Jwts.parser()
-                .setSigningKey(SecurityConstants.getSecretToken())
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        String user = jwtService.getUsername(token);
+
+        if (!jwtService.isValidToken(token)) {
+            return null;
+        }
 
         if (user == null) {
             return null;
