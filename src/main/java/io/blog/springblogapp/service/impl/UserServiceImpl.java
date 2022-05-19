@@ -2,10 +2,13 @@ package io.blog.springblogapp.service.impl;
 
 import io.blog.springblogapp.dto.AddressDto;
 import io.blog.springblogapp.dto.UserDto;
+import io.blog.springblogapp.exception.AddressNotFoundException;
 import io.blog.springblogapp.exception.AuthException;
+import io.blog.springblogapp.exception.BusinessException;
 import io.blog.springblogapp.exception.UserNotFoundException;
+import io.blog.springblogapp.model.entity.AddressEntity;
 import io.blog.springblogapp.model.entity.UserEntity;
-import io.blog.springblogapp.model.response.UserResponse;
+import io.blog.springblogapp.repository.AddressRepository;
 import io.blog.springblogapp.repository.UserRepository;
 import io.blog.springblogapp.service.UserService;
 import io.blog.springblogapp.utils.ErrorMessages;
@@ -13,7 +16,6 @@ import io.blog.springblogapp.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +34,7 @@ public class UserServiceImpl implements UserService {
 
     private static final Integer PUBLIC_ID_LENGTH = 40;
     private final UserRepository userRepository;
+    private final AddressRepository addressRepository;
     private final Utils utils;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
@@ -67,15 +70,15 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<UserResponse> getAllUsers(int page, int limit) {
+    public List<UserDto> getAllUsers(int page, int limit) {
         Pageable pageableRequest = PageRequest.of(page, limit);
 
         Page<UserEntity> userEntities = userRepository.findAll(pageableRequest);
         List<UserEntity> users = userEntities.toList();
 
-        List<UserDto> usersDto = this.convertToUserDto(users);
+        Type listType = new TypeToken<List<UserDto>>() {}.getType();
 
-        return this.convertToUserResponse(usersDto);
+        return modelMapper.map(users, listType);
     }
 
     @Override
@@ -88,6 +91,18 @@ public class UserServiceImpl implements UserService {
         }
 
         return new ArrayList<>();
+    }
+
+    @Override
+    public AddressDto getUserAddress(String userId, String addressId) {
+        UserEntity foundUser = findUserByUserId(userId);
+        AddressEntity foundAddress = findByAddressId(addressId);
+
+        if (!foundUser.equals(foundAddress.getUser())) {
+            throw new BusinessException(ErrorMessages.ADDRESS_NOT_BELONG_USER.getErrorMessage());
+        }
+
+        return modelMapper.map(foundAddress, AddressDto.class);
     }
 
     @Transactional(readOnly = true)
@@ -146,27 +161,13 @@ public class UserServiceImpl implements UserService {
         return foundUser.get();
     }
 
-    private List<UserDto> convertToUserDto(List<UserEntity> users) {
-        List<UserDto> convertedList = new ArrayList<>();
-
-        for (UserEntity user : users) {
-            UserDto userModel = new UserDto();
-            BeanUtils.copyProperties(user, userModel);
-            convertedList.add(userModel);
+    @Transactional(readOnly = true)
+    private AddressEntity findByAddressId(String addressId) {
+        Optional<AddressEntity> foundAddress = addressRepository.findByAddressId(addressId);
+        if (foundAddress.isEmpty()) {
+            throw new AddressNotFoundException(ErrorMessages.NO_RECORD_FOUND_ID.getErrorMessage());
         }
 
-        return convertedList;
-    }
-
-    private List<UserResponse> convertToUserResponse(List<UserDto> users) {
-        List<UserResponse> convertedList = new ArrayList<>();
-
-        for (UserDto user : users) {
-            UserResponse userModel = new UserResponse();
-            BeanUtils.copyProperties(user, userModel);
-            convertedList.add(userModel);
-        }
-
-        return convertedList;
+        return foundAddress.get();
     }
 }

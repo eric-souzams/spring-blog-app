@@ -27,6 +27,34 @@ public class HandlerException {
         return ResponseEntity.status(status).body(errorMessage);
     }
 
+    @ExceptionHandler(AddressNotFoundException.class)
+    public ResponseEntity<Object> handlerAddressNotFoundException(AddressNotFoundException exception) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+
+        ErrorMessage errorMessage = ErrorMessage
+                .builder()
+                .timestamp(OffsetDateTime.now())
+                .status(status.value())
+                .message(exception.getMessage())
+                .build();
+
+        return ResponseEntity.status(status).body(errorMessage);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<Object> handlerBusinessException(BusinessException exception) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+
+        ErrorMessage errorMessage = ErrorMessage
+                .builder()
+                .timestamp(OffsetDateTime.now())
+                .status(status.value())
+                .message(exception.getMessage())
+                .build();
+
+        return ResponseEntity.status(status).body(errorMessage);
+    }
+
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<Object> handlerAuthException(AuthException exception) {
         HttpStatus status = HttpStatus.UNAUTHORIZED;

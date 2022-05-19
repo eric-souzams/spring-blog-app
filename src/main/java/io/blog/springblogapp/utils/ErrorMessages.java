@@ -15,6 +15,7 @@ public enum ErrorMessages {
     AUTHENTICATION_FAILED("Wrong credentials"),
     COULD_NOT_UPDATE_RECORD("Could not update record"),
     COULD_NOT_DELETE_RECORD("Could not delete record"),
+    ADDRESS_NOT_BELONG_USER("The address does not belong to the informed user"),
     EMAIL_ADDRESS_NOT_VERIFIED("Email address could not be verified");
 
     private final String errorMessage;
