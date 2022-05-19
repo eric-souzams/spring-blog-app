@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -13,6 +14,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto implements Serializable {
+
+
     private static final long serialVersionUID = 1L;
 
     private UUID id;
@@ -32,5 +35,7 @@ public class UserDto implements Serializable {
     private String emailVerificationToken;
 
     private Boolean emailVerificationStatus = false;
+
+    private List<AddressDto> addresses;
 
 }

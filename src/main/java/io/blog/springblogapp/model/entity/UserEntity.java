@@ -1,4 +1,4 @@
-package io.blog.springblogapp.model;
+package io.blog.springblogapp.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,11 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -46,5 +44,6 @@ public class UserEntity implements Serializable {
     @Column(nullable = false, columnDefinition = "boolean default false")
     private Boolean emailVerificationStatus = false;
 
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<AddressEntity> addresses;
 }

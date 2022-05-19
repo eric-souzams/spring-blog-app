@@ -14,6 +14,10 @@ public class Utils {
         return generateRandomString(length);
     }
 
+    public String generateAddressId(int length) {
+        return generateRandomString(length);
+    }
+
     private String generateRandomString(int length) {
         String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         StringBuilder sb = new StringBuilder(length);

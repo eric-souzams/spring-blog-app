@@ -1,6 +1,6 @@
 package io.blog.springblogapp.service.impl;
 
-import io.blog.springblogapp.model.UserEntity;
+import io.blog.springblogapp.model.entity.UserEntity;
 import io.blog.springblogapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

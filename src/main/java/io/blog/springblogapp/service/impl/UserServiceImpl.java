@@ -1,24 +1,27 @@
 package io.blog.springblogapp.service.impl;
 
+import io.blog.springblogapp.dto.AddressDto;
 import io.blog.springblogapp.dto.UserDto;
 import io.blog.springblogapp.exception.AuthException;
 import io.blog.springblogapp.exception.UserNotFoundException;
-import io.blog.springblogapp.model.UserEntity;
-import io.blog.springblogapp.model.response.UserDetailsResponse;
+import io.blog.springblogapp.model.entity.UserEntity;
+import io.blog.springblogapp.model.response.UserResponse;
 import io.blog.springblogapp.repository.UserRepository;
 import io.blog.springblogapp.service.UserService;
 import io.blog.springblogapp.utils.ErrorMessages;
 import io.blog.springblogapp.utils.Utils;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,28 +30,31 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private static final Integer PUBLIC_ID_LENGTH = 40;
     private final UserRepository userRepository;
     private final Utils utils;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
     @Transactional
     @Override
     public UserDto createUser(UserDto userDTO) {
         verifyIfUserAlreadyExists(userDTO);
 
-        UserEntity user = new UserEntity();
-        UserDto response = new UserDto();
+        for (AddressDto address : userDTO.getAddresses()) {
+            address.setUser(userDTO);
+            address.setAddressId(utils.generateAddressId(PUBLIC_ID_LENGTH));
+        }
 
-        BeanUtils.copyProperties(userDTO, user);
+        UserEntity user = modelMapper.map(userDTO, UserEntity.class);
 
-        String publicUserId = utils.generateUserId(40);
+        String publicUserId = utils.generateUserId(PUBLIC_ID_LENGTH);
         user.setUserId(publicUserId);
         user.setEncryptedPassword(passwordEncoder.encode(userDTO.getPassword()));
 
         UserEntity savedUser = userRepository.save(user);
-        BeanUtils.copyProperties(savedUser, response);
 
-        return response;
+        return modelMapper.map(savedUser, UserDto.class);
     }
 
     @Transactional(readOnly = true)
@@ -56,15 +62,12 @@ public class UserServiceImpl implements UserService {
     public UserDto getUser(String email) {
         UserEntity user = findUserByEmail(email);
 
-        UserDto returnUser = new UserDto();
-        BeanUtils.copyProperties(user, returnUser);
-
-        return returnUser;
+        return modelMapper.map(user, UserDto.class);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<UserDetailsResponse> getAllUsers(int page, int limit) {
+    public List<UserResponse> getAllUsers(int page, int limit) {
         Pageable pageableRequest = PageRequest.of(page, limit);
 
         Page<UserEntity> userEntities = userRepository.findAll(pageableRequest);
@@ -75,15 +78,24 @@ public class UserServiceImpl implements UserService {
         return this.convertToUserResponse(usersDto);
     }
 
+    @Override
+    public List<AddressDto> getUserAddresses(String userId) {
+        UserEntity foundUser = findUserByUserId(userId);
+
+        if (!foundUser.getAddresses().isEmpty()) {
+            Type listType = new TypeToken<List<AddressDto>>() {}.getType();
+            return modelMapper.map(foundUser.getAddresses(), listType);
+        }
+
+        return new ArrayList<>();
+    }
+
     @Transactional(readOnly = true)
     @Override
     public UserDto getUserByUserId(String userId) {
-        UserDto returnUser = new UserDto();
-
         UserEntity foundUser = findUserByUserId(userId);
-        BeanUtils.copyProperties(foundUser, returnUser);
 
-        return returnUser;
+        return modelMapper.map(foundUser, UserDto.class);
     }
 
     @Transactional
@@ -96,10 +108,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity updatedUser = userRepository.save(foundUser);
 
-        UserDto returnUser = new UserDto();
-        BeanUtils.copyProperties(updatedUser, returnUser);
-
-        return returnUser;
+        return modelMapper.map(updatedUser, UserDto.class);
     }
 
     @Transactional
@@ -149,11 +158,11 @@ public class UserServiceImpl implements UserService {
         return convertedList;
     }
 
-    private List<UserDetailsResponse> convertToUserResponse(List<UserDto> users) {
-        List<UserDetailsResponse> convertedList = new ArrayList<>();
+    private List<UserResponse> convertToUserResponse(List<UserDto> users) {
+        List<UserResponse> convertedList = new ArrayList<>();
 
         for (UserDto user : users) {
-            UserDetailsResponse userModel = new UserDetailsResponse();
+            UserResponse userModel = new UserResponse();
             BeanUtils.copyProperties(user, userModel);
             convertedList.add(userModel);
         }
