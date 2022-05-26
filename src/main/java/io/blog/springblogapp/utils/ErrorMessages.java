@@ -16,6 +16,8 @@ public enum ErrorMessages {
     COULD_NOT_UPDATE_RECORD("Could not update record"),
     COULD_NOT_DELETE_RECORD("Could not delete record"),
     ADDRESS_NOT_BELONG_USER("The address does not belong to the informed user"),
+    INVALID_TOKEN_VALIDATION("The token provided is invalid or expired"),
+    EMAIL_ALREADY_VALIDATED("Email address already has been validated"),
     EMAIL_ADDRESS_NOT_VERIFIED("Email address could not be verified");
 
     private final String errorMessage;

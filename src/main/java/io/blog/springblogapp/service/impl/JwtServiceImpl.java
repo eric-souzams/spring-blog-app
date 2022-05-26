@@ -56,4 +56,13 @@ public class JwtServiceImpl implements JwtService {
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.getSecretToken())
                 .compact();
     }
+
+    @Override
+    public String generateEmailTokenValidation(UserDto user) {
+        return Jwts.builder()
+                .setSubject(user.getEmail())
+                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EMAIL_EXPIRATION_TIME))
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.getSecretToken())
+                .compact();
+    }
 }

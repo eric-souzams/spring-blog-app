@@ -15,4 +15,5 @@ public interface UserService {
     List<UserDto> getAllUsers(int page, int limit);
     List<AddressDto> getUserAddresses(String userid);
     AddressDto getUserAddress(String userId, String addressId);
+    void verifyEmailToken(String token);
 }

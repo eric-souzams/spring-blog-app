@@ -13,4 +13,6 @@ public interface JwtService {
 
     String generateToken(UserDto user);
 
+    String generateEmailTokenValidation(UserDto user);
+
 }

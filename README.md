@@ -11,17 +11,17 @@
 
 
 ## Routes
-| Method | URL                                                               | Description                    |
-|--------|-------------------------------------------------------------------|--------------------------------|
-| POST   | http://localhost:8080/api/v1/auth/login                           | Login                          |
-| POST   | http://localhost:8080/api/v1/users                                | Sign Up                        |
-| GET    | http://localhost:8080/api/v1/users/email-verification             | Verify E-mail Account          |
-| GET    | http://localhost:8080/api/v1/users/                               | Get All Users                  |
-| GET    | http://localhost:8080/api/v1/users/{userID}                       | Get Specific User              |
-| GET    | http://localhost:8080/api/v1/users/{userID}/addresses             | Get All Addresses Belongs User |
-| GET    | http://localhost:8080/api/v1/users/{userID}/addresses/{addressID} | Get Specific Address From User |
-| PUT    | http://localhost:8080/api/v1/users/{userID}                       | Update User Data               |
-| DELETE | http://localhost:8080/api/v1/users/{userID}                       | Delete User                    |
+| Method | URL                                                                 | Description                    |
+|--------|---------------------------------------------------------------------|--------------------------------|
+| POST   | http://localhost:8080/api/v1/auth/login                             | Login                          |
+| POST   | http://localhost:8080/api/v1/users                                  | Sign Up                        |
+| GET    | http://localhost:8080/api/v1/users/email-verification?token={token} | Verify E-mail Account          |
+| GET    | http://localhost:8080/api/v1/users/                                 | Get All Users                  |
+| GET    | http://localhost:8080/api/v1/users/{userID}                         | Get Specific User              |
+| GET    | http://localhost:8080/api/v1/users/{userID}/addresses               | Get All Addresses Belongs User |
+| GET    | http://localhost:8080/api/v1/users/{userID}/addresses/{addressID}   | Get Specific Address From User |
+| PUT    | http://localhost:8080/api/v1/users/{userID}                         | Update User Data               |
+| DELETE | http://localhost:8080/api/v1/users/{userID}                         | Delete User                    |
 
 
 ## Technologies
@@ -34,6 +34,7 @@ This project was developed using the following technologies:
 - [JUnit 5](https://junit.org/junit5/)
 - [Model Mapper](http://modelmapper.org/)
 - [JWT](https://jwt.io/)
+- [Amazon SES](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/get-started.html)
 - [MYSQL + H2]()
 
 

@@ -32,6 +32,13 @@ public class UserController {
     private final UserService userService;
     private final ModelMapper modelMapper;
 
+    @GetMapping(value = "/email-verification", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    public ResponseEntity<Void> verifyEmailToken(@RequestParam(value = "token") String token) {
+        userService.verifyEmailToken(token);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
     @GetMapping(value = "/{id}/addresses", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public ResponseEntity<CollectionModel<AddressResponse>> getUserAddresses(@PathVariable("id") String userId) {
         List<AddressDto> foundAddresses = userService.getUserAddresses(userId);
@@ -118,7 +125,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public ResponseEntity<Void> deleteUser(@PathVariable("id") String userId) {
         userService.deleteUser(userId);
 

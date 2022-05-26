@@ -10,6 +10,7 @@ import io.blog.springblogapp.model.entity.AddressEntity;
 import io.blog.springblogapp.model.entity.UserEntity;
 import io.blog.springblogapp.repository.AddressRepository;
 import io.blog.springblogapp.repository.UserRepository;
+import io.blog.springblogapp.service.JwtService;
 import io.blog.springblogapp.service.UserService;
 import io.blog.springblogapp.utils.ErrorMessages;
 import io.blog.springblogapp.utils.Utils;
@@ -38,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private final Utils utils;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
+    private final JwtService jwtService;
 
     @Transactional
     @Override
@@ -54,6 +56,8 @@ public class UserServiceImpl implements UserService {
         String publicUserId = utils.generateUserId(PUBLIC_ID_LENGTH);
         user.setUserId(publicUserId);
         user.setEncryptedPassword(passwordEncoder.encode(userDTO.getPassword()));
+        user.setEmailVerificationToken(jwtService.generateEmailTokenValidation(userDTO));
+        user.setEmailVerificationStatus(false);
 
         UserEntity savedUser = userRepository.save(user);
 
@@ -104,6 +108,25 @@ public class UserServiceImpl implements UserService {
 
         return modelMapper.map(foundAddress, AddressDto.class);
     }
+
+    @Override
+    @Transactional
+    public void verifyEmailToken(String token) {
+        UserEntity user = getUserByEmailVerificationToken(token);
+
+        if (user.getEmailVerificationStatus().equals(true)) {
+            throw new BusinessException(ErrorMessages.EMAIL_ALREADY_VALIDATED.getErrorMessage());
+        }
+
+        if (!jwtService.isValidToken(token)) {
+            throw new BusinessException(ErrorMessages.INVALID_TOKEN_VALIDATION.getErrorMessage());
+        }
+
+        user.setEmailVerificationToken(null);
+        user.setEmailVerificationStatus(true);
+        userRepository.save(user);
+    }
+
 
     @Transactional(readOnly = true)
     @Override
@@ -169,5 +192,15 @@ public class UserServiceImpl implements UserService {
         }
 
         return foundAddress.get();
+    }
+
+    @Transactional(readOnly = true)
+    private UserEntity getUserByEmailVerificationToken(String token) {
+        Optional<UserEntity> foundUser = userRepository.findUserByEmailVerificationToken(token);
+        if (foundUser.isEmpty()) {
+            throw new BusinessException(ErrorMessages.EMAIL_ADDRESS_NOT_VERIFIED.getErrorMessage());
+        }
+
+        return foundUser.get();
     }
 }

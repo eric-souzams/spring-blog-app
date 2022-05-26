@@ -25,6 +25,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("Wrong credentials.");
         }
 
-        return new User(user.get().getEmail(), user.get().getEncryptedPassword(), new ArrayList<>());
+        return new User(user.get().getEmail(), user.get().getEncryptedPassword(), user.get().getEmailVerificationStatus(), true, true, true, new ArrayList<>());
     }
 }
