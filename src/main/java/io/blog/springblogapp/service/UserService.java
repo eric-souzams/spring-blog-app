@@ -2,6 +2,7 @@ package io.blog.springblogapp.service;
 
 import io.blog.springblogapp.dto.AddressDto;
 import io.blog.springblogapp.dto.UserDto;
+import io.blog.springblogapp.model.request.ResetPasswordUpdateRequest;
 
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface UserService {
     List<AddressDto> getUserAddresses(String userid);
     AddressDto getUserAddress(String userId, String addressId);
     void verifyEmailToken(String token);
+    void resetPasswordRequest(String email);
+    void resetPasswordUpdate(String token, ResetPasswordUpdateRequest request);
 }

@@ -2,6 +2,8 @@ package io.blog.springblogapp.controller;
 
 import io.blog.springblogapp.dto.AddressDto;
 import io.blog.springblogapp.dto.UserDto;
+import io.blog.springblogapp.model.request.ResetPasswordRequest;
+import io.blog.springblogapp.model.request.ResetPasswordUpdateRequest;
 import io.blog.springblogapp.model.request.UserDetailsRequest;
 import io.blog.springblogapp.model.request.UserUpdateRequest;
 import io.blog.springblogapp.model.response.AddressResponse;
@@ -12,7 +14,6 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,26 @@ public class UserController {
     @GetMapping(value = "/email-verification", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public ResponseEntity<Void> verifyEmailToken(@RequestParam(value = "token") String token) {
         userService.verifyEmailToken(token);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping(value = "/reset-password-request",
+                 produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+                 consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    public ResponseEntity<Void> resetPasswordRequest(@RequestBody ResetPasswordRequest request) {
+        userService.resetPasswordRequest(request.getEmail());
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping(value = "/reset-password",
+            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+            consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    public ResponseEntity<Void> resetPassword(@RequestParam(value = "token") String token,
+                                              @RequestBody ResetPasswordUpdateRequest request) {
+
+        userService.resetPasswordUpdate(token, request);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

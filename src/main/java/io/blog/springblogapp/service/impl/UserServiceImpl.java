@@ -7,8 +7,11 @@ import io.blog.springblogapp.exception.AuthException;
 import io.blog.springblogapp.exception.BusinessException;
 import io.blog.springblogapp.exception.UserNotFoundException;
 import io.blog.springblogapp.model.entity.AddressEntity;
+import io.blog.springblogapp.model.entity.ResetPasswordToken;
 import io.blog.springblogapp.model.entity.UserEntity;
+import io.blog.springblogapp.model.request.ResetPasswordUpdateRequest;
 import io.blog.springblogapp.repository.AddressRepository;
+import io.blog.springblogapp.repository.ResetPasswordTokenRepository;
 import io.blog.springblogapp.repository.UserRepository;
 import io.blog.springblogapp.service.JwtService;
 import io.blog.springblogapp.service.UserService;
@@ -36,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private static final Integer PUBLIC_ID_LENGTH = 40;
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
+    private final ResetPasswordTokenRepository resetPasswordTokenRepository;
     private final Utils utils;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
@@ -86,6 +90,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<AddressDto> getUserAddresses(String userId) {
         UserEntity foundUser = findUserByUserId(userId);
 
@@ -98,6 +103,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public AddressDto getUserAddress(String userId, String addressId) {
         UserEntity foundUser = findUserByUserId(userId);
         AddressEntity foundAddress = findByAddressId(addressId);
@@ -127,6 +133,38 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    @Transactional
+    public void resetPasswordRequest(String email) {
+        UserEntity foundUser = findUserByEmail(email);
+
+        String token = jwtService.generateResetPasswordToken(foundUser.getUserId());
+
+        ResetPasswordToken resetToken = ResetPasswordToken
+                .builder()
+                .token(token)
+                .user(foundUser)
+                .build();
+
+        resetPasswordTokenRepository.save(resetToken);
+    }
+
+    @Override
+    @Transactional
+    public void resetPasswordUpdate(String token, ResetPasswordUpdateRequest request) {
+        ResetPasswordToken resetToken = findByResetToken(token);
+
+        if (!jwtService.isValidToken(resetToken.getToken())) {
+            throw new BusinessException(ErrorMessages.INVALID_TOKEN_VALIDATION.getErrorMessage());
+        }
+
+        if (!request.getNewPassword().equals(request.getConfirmNewPassword())) {
+            throw new BusinessException(ErrorMessages.INVALID_PASSWORD_RESET.getErrorMessage());
+        }
+
+        String newPassword = passwordEncoder.encode(request.getNewPassword());
+        resetToken.getUser().setEncryptedPassword(newPassword);
+    }
 
     @Transactional(readOnly = true)
     @Override
@@ -158,6 +196,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = true)
+    private ResetPasswordToken findByResetToken(String resetToken) {
+        Optional<ResetPasswordToken> foundToken = resetPasswordTokenRepository.findByToken(resetToken);
+        if (foundToken.isEmpty()) {
+            throw new BusinessException(ErrorMessages.NO_TOKEN_FOUND.getErrorMessage());
+        }
+
+        return foundToken.get();
+    }
+
+    @Transactional(readOnly = true)
     private void verifyIfUserAlreadyExists(UserDto userDTO) {
         Optional<UserEntity> result = userRepository.findByEmail(userDTO.getEmail());
         if (result.isPresent()) {
@@ -171,6 +219,7 @@ public class UserServiceImpl implements UserService {
         if (user.isEmpty()) {
             throw new UserNotFoundException(ErrorMessages.NO_RECORD_FOUND_USERNAME.getErrorMessage());
         }
+
         return user.get();
     }
 
