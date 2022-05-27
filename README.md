@@ -16,6 +16,8 @@
 | POST   | http://localhost:8080/api/v1/auth/login                             | Login                          |
 | POST   | http://localhost:8080/api/v1/users                                  | Sign Up                        |
 | GET    | http://localhost:8080/api/v1/users/email-verification?token={token} | Verify E-mail Account          |
+| POST   | http://localhost:8080/api/v1/users/reset-password-request           | Password Reset Request         |
+| POST   | http://localhost:8080/api/v1/users/reset-password?token={token}     | Password Reset Update          |
 | GET    | http://localhost:8080/api/v1/users/                                 | Get All Users                  |
 | GET    | http://localhost:8080/api/v1/users/{userID}                         | Get Specific User              |
 | GET    | http://localhost:8080/api/v1/users/{userID}/addresses               | Get All Addresses Belongs User |
