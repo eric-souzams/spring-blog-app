@@ -1,8 +1,7 @@
-package io.blog.springblogapp.service.impl;
+package io.blog.springblogapp.service;
 
 import io.blog.springblogapp.dto.UserDto;
 import io.blog.springblogapp.security.SecurityConstants;
-import io.blog.springblogapp.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -14,8 +13,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class JwtServiceImpl implements JwtService {
 
     @Override

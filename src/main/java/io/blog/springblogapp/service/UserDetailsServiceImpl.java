@@ -1,8 +1,8 @@
-package io.blog.springblogapp.service.impl;
+package io.blog.springblogapp.service;
 
 import io.blog.springblogapp.model.entity.UserEntity;
 import io.blog.springblogapp.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.util.ArrayList;
 import java.util.Optional;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Configuration
 public class UserDetailsServiceImpl implements UserDetailsService {
 

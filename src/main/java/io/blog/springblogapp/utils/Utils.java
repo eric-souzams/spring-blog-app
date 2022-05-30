@@ -10,19 +10,19 @@ public class Utils {
 
     private final Random RANDOM = new SecureRandom();
 
-    public String generateUserId(int length) {
-        return generateRandomString(length);
+    public String generateUserId() {
+        return generateRandomString();
     }
 
-    public String generateAddressId(int length) {
-        return generateRandomString(length);
+    public String generateAddressId() {
+        return generateRandomString();
     }
 
-    private String generateRandomString(int length) {
+    private String generateRandomString() {
         String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-        StringBuilder sb = new StringBuilder(length);
+        StringBuilder sb = new StringBuilder(40);
 
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < 40; i++) {
             sb.append(ALPHABET.charAt(RANDOM.nextInt(ALPHABET.length())));
         }
 

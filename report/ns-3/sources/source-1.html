@@ -1,0 +1,305 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > UserController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">io.blog.springblogapp.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: UserController (io.blog.springblogapp.controller)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UserController</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/43)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">UserController$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">UserController$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/45)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package io.blog.springblogapp.controller;
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import io.blog.springblogapp.dto.AddressDto;
+<i class="no-highlight">4</i>&nbsp;import io.blog.springblogapp.dto.UserDto;
+<i class="no-highlight">5</i>&nbsp;import io.blog.springblogapp.model.request.ResetPasswordRequest;
+<i class="no-highlight">6</i>&nbsp;import io.blog.springblogapp.model.request.ResetPasswordUpdateRequest;
+<i class="no-highlight">7</i>&nbsp;import io.blog.springblogapp.model.request.UserDetailsRequest;
+<i class="no-highlight">8</i>&nbsp;import io.blog.springblogapp.model.request.UserUpdateRequest;
+<i class="no-highlight">9</i>&nbsp;import io.blog.springblogapp.model.response.AddressResponse;
+<i class="no-highlight">10</i>&nbsp;import io.blog.springblogapp.model.response.UserResponse;
+<i class="no-highlight">11</i>&nbsp;import io.blog.springblogapp.service.UserService;
+<i class="no-highlight">12</i>&nbsp;import lombok.AllArgsConstructor;
+<i class="no-highlight">13</i>&nbsp;import org.modelmapper.ModelMapper;
+<i class="no-highlight">14</i>&nbsp;import org.modelmapper.TypeToken;
+<i class="no-highlight">15</i>&nbsp;import org.springframework.hateoas.CollectionModel;
+<i class="no-highlight">16</i>&nbsp;import org.springframework.hateoas.Link;
+<i class="no-highlight">17</i>&nbsp;import org.springframework.http.HttpStatus;
+<i class="no-highlight">18</i>&nbsp;import org.springframework.http.MediaType;
+<i class="no-highlight">19</i>&nbsp;import org.springframework.http.ResponseEntity;
+<i class="no-highlight">20</i>&nbsp;import org.springframework.web.bind.annotation.*;
+<i class="no-highlight">21</i>&nbsp;
+<i class="no-highlight">22</i>&nbsp;import java.lang.reflect.Type;
+<i class="no-highlight">23</i>&nbsp;import java.util.List;
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+<i class="no-highlight">26</i>&nbsp;import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+<i class="no-highlight">27</i>&nbsp;
+<b class="nc"><i class="no-highlight">28</i>&nbsp;@AllArgsConstructor</b>
+<i class="no-highlight">29</i>&nbsp;@RestController
+<i class="no-highlight">30</i>&nbsp;@RequestMapping(value = &quot;/api/v1/users&quot;)
+<i class="no-highlight">31</i>&nbsp;public class UserController {
+<i class="no-highlight">32</i>&nbsp;
+<i class="no-highlight">33</i>&nbsp;    private final UserService userService;
+<i class="no-highlight">34</i>&nbsp;    private final ModelMapper modelMapper;
+<i class="no-highlight">35</i>&nbsp;
+<i class="no-highlight">36</i>&nbsp;    @GetMapping(value = &quot;/email-verification&quot;, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+<i class="no-highlight">37</i>&nbsp;    public ResponseEntity&lt;Void&gt; verifyEmailToken(@RequestParam(value = &quot;token&quot;) String token) {
+<b class="nc"><i class="no-highlight">38</i>&nbsp;        userService.verifyEmailToken(token);</b>
+<i class="no-highlight">39</i>&nbsp;
+<b class="nc"><i class="no-highlight">40</i>&nbsp;        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();</b>
+<i class="no-highlight">41</i>&nbsp;    }
+<i class="no-highlight">42</i>&nbsp;
+<i class="no-highlight">43</i>&nbsp;    @PostMapping(value = &quot;/reset-password-request&quot;,
+<i class="no-highlight">44</i>&nbsp;                 produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+<i class="no-highlight">45</i>&nbsp;                 consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+<i class="no-highlight">46</i>&nbsp;    public ResponseEntity&lt;Void&gt; resetPasswordRequest(@RequestBody ResetPasswordRequest request) {
+<b class="nc"><i class="no-highlight">47</i>&nbsp;        userService.resetPasswordRequest(request.getEmail());</b>
+<i class="no-highlight">48</i>&nbsp;
+<b class="nc"><i class="no-highlight">49</i>&nbsp;        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();</b>
+<i class="no-highlight">50</i>&nbsp;    }
+<i class="no-highlight">51</i>&nbsp;
+<i class="no-highlight">52</i>&nbsp;    @PostMapping(value = &quot;/reset-password&quot;,
+<i class="no-highlight">53</i>&nbsp;            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+<i class="no-highlight">54</i>&nbsp;            consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+<i class="no-highlight">55</i>&nbsp;    public ResponseEntity&lt;Void&gt; resetPassword(@RequestParam(value = &quot;token&quot;) String token,
+<i class="no-highlight">56</i>&nbsp;                                              @RequestBody ResetPasswordUpdateRequest request) {
+<i class="no-highlight">57</i>&nbsp;
+<b class="nc"><i class="no-highlight">58</i>&nbsp;        userService.resetPasswordUpdate(token, request);</b>
+<i class="no-highlight">59</i>&nbsp;
+<b class="nc"><i class="no-highlight">60</i>&nbsp;        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();</b>
+<i class="no-highlight">61</i>&nbsp;    }
+<i class="no-highlight">62</i>&nbsp;
+<i class="no-highlight">63</i>&nbsp;    @GetMapping(value = &quot;/{id}/addresses&quot;, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+<i class="no-highlight">64</i>&nbsp;    public ResponseEntity&lt;CollectionModel&lt;AddressResponse&gt;&gt; getUserAddresses(@PathVariable(&quot;id&quot;) String userId) {
+<b class="nc"><i class="no-highlight">65</i>&nbsp;        List&lt;AddressDto&gt; foundAddresses = userService.getUserAddresses(userId);</b>
+<i class="no-highlight">66</i>&nbsp;
+<b class="nc"><i class="no-highlight">67</i>&nbsp;        Type listType = new TypeToken&lt;List&lt;AddressResponse&gt;&gt;() {}.getType();</b>
+<b class="nc"><i class="no-highlight">68</i>&nbsp;        List&lt;AddressResponse&gt; addresses = modelMapper.map(foundAddresses, listType);</b>
+<i class="no-highlight">69</i>&nbsp;
+<b class="nc"><i class="no-highlight">70</i>&nbsp;        for (AddressResponse address : addresses) {</b>
+<b class="nc"><i class="no-highlight">71</i>&nbsp;            Link selfLink = linkTo(methodOn(UserController.class)</b>
+<b class="nc"><i class="no-highlight">72</i>&nbsp;                    .getUserAddress(userId, address.getAddressId())).withSelfRel();</b>
+<i class="no-highlight">73</i>&nbsp;
+<b class="nc"><i class="no-highlight">74</i>&nbsp;            address.add(selfLink);</b>
+<b class="nc"><i class="no-highlight">75</i>&nbsp;        }</b>
+<i class="no-highlight">76</i>&nbsp;
+<b class="nc"><i class="no-highlight">77</i>&nbsp;        Link userLink = linkTo(methodOn(UserController.class).getUser(userId)).withRel(&quot;user&quot;);</b>
+<b class="nc"><i class="no-highlight">78</i>&nbsp;        Link selfLink = linkTo(methodOn(UserController.class).getUserAddresses(userId)).withSelfRel();</b>
+<i class="no-highlight">79</i>&nbsp;
+<b class="nc"><i class="no-highlight">80</i>&nbsp;        CollectionModel&lt;AddressResponse&gt; response = CollectionModel.of(addresses, userLink, selfLink);</b>
+<i class="no-highlight">81</i>&nbsp;
+<b class="nc"><i class="no-highlight">82</i>&nbsp;        return ResponseEntity.status(HttpStatus.OK).body(response);</b>
+<i class="no-highlight">83</i>&nbsp;    }
+<i class="no-highlight">84</i>&nbsp;
+<i class="no-highlight">85</i>&nbsp;    @GetMapping(value = &quot;/{id}/addresses/{addressId}&quot;, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+<i class="no-highlight">86</i>&nbsp;    public ResponseEntity&lt;AddressResponse&gt; getUserAddress(@PathVariable(&quot;id&quot;) String userId,
+<i class="no-highlight">87</i>&nbsp;                                                          @PathVariable(&quot;addressId&quot;) String addressId) {
+<i class="no-highlight">88</i>&nbsp;
+<b class="nc"><i class="no-highlight">89</i>&nbsp;        AddressDto foundAddresses = userService.getUserAddress(userId, addressId);</b>
+<i class="no-highlight">90</i>&nbsp;
+<b class="nc"><i class="no-highlight">91</i>&nbsp;        AddressResponse response = modelMapper.map(foundAddresses, AddressResponse.class);</b>
+<i class="no-highlight">92</i>&nbsp;
+<b class="nc"><i class="no-highlight">93</i>&nbsp;        Link userLink = linkTo(methodOn(UserController.class).getUser(userId)).withRel(&quot;user&quot;);</b>
+<b class="nc"><i class="no-highlight">94</i>&nbsp;        Link userAddressLink = linkTo(methodOn(UserController.class).getUserAddresses(userId)).withRel(&quot;addresses&quot;);</b>
+<b class="nc"><i class="no-highlight">95</i>&nbsp;        Link selfLink = linkTo(methodOn(UserController.class).getUserAddress(userId, addressId)).withSelfRel();</b>
+<i class="no-highlight">96</i>&nbsp;
+<b class="nc"><i class="no-highlight">97</i>&nbsp;        response.add(userLink, userAddressLink, selfLink);</b>
+<i class="no-highlight">98</i>&nbsp;
+<b class="nc"><i class="no-highlight">99</i>&nbsp;        return ResponseEntity.status(HttpStatus.OK).body(response);</b>
+<i class="no-highlight">100</i>&nbsp;    }
+<i class="no-highlight">101</i>&nbsp;
+<i class="no-highlight">102</i>&nbsp;    @GetMapping(value = &quot;/{id}&quot;, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+<i class="no-highlight">103</i>&nbsp;    public ResponseEntity&lt;UserResponse&gt; getUser(@PathVariable(&quot;id&quot;) String userId) {
+<b class="nc"><i class="no-highlight">104</i>&nbsp;        UserDto foundUser = userService.getUserByUserId(userId);</b>
+<i class="no-highlight">105</i>&nbsp;
+<b class="nc"><i class="no-highlight">106</i>&nbsp;        UserResponse response = modelMapper.map(foundUser, UserResponse.class);</b>
+<i class="no-highlight">107</i>&nbsp;
+<b class="nc"><i class="no-highlight">108</i>&nbsp;        return ResponseEntity.status(HttpStatus.OK).body(response);</b>
+<i class="no-highlight">109</i>&nbsp;    }
+<i class="no-highlight">110</i>&nbsp;
+<i class="no-highlight">111</i>&nbsp;    @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+<i class="no-highlight">112</i>&nbsp;    public ResponseEntity&lt;List&lt;UserResponse&gt;&gt; getAllUsers(@RequestParam(value = &quot;page&quot;, defaultValue = &quot;0&quot;) int page,
+<i class="no-highlight">113</i>&nbsp;                                                          @RequestParam(value = &quot;limit&quot;, defaultValue = &quot;15&quot;) int limit) {
+<i class="no-highlight">114</i>&nbsp;
+<b class="nc"><i class="no-highlight">115</i>&nbsp;        List&lt;UserDto&gt; allUsers = userService.getAllUsers(page, limit);</b>
+<i class="no-highlight">116</i>&nbsp;
+<b class="nc"><i class="no-highlight">117</i>&nbsp;        Type listType = new TypeToken&lt;List&lt;UserResponse&gt;&gt;() {}.getType();</b>
+<b class="nc"><i class="no-highlight">118</i>&nbsp;        List&lt;UserResponse&gt; response = modelMapper.map(allUsers, listType);</b>
+<i class="no-highlight">119</i>&nbsp;
+<b class="nc"><i class="no-highlight">120</i>&nbsp;        return ResponseEntity.status(HttpStatus.OK).body(response);</b>
+<i class="no-highlight">121</i>&nbsp;    }
+<i class="no-highlight">122</i>&nbsp;
+<i class="no-highlight">123</i>&nbsp;    @PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+<i class="no-highlight">124</i>&nbsp;                 consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+<i class="no-highlight">125</i>&nbsp;    public ResponseEntity&lt;UserResponse&gt; createUser(@RequestBody UserDetailsRequest request) {
+<b class="nc"><i class="no-highlight">126</i>&nbsp;        UserDto userDto = modelMapper.map(request, UserDto.class);</b>
+<i class="no-highlight">127</i>&nbsp;
+<b class="nc"><i class="no-highlight">128</i>&nbsp;        UserDto createdUser = userService.createUser(userDto);</b>
+<i class="no-highlight">129</i>&nbsp;
+<b class="nc"><i class="no-highlight">130</i>&nbsp;        UserResponse response = modelMapper.map(createdUser, UserResponse.class);</b>
+<i class="no-highlight">131</i>&nbsp;
+<b class="nc"><i class="no-highlight">132</i>&nbsp;        return ResponseEntity.status(HttpStatus.CREATED).body(response);</b>
+<i class="no-highlight">133</i>&nbsp;    }
+<i class="no-highlight">134</i>&nbsp;
+<i class="no-highlight">135</i>&nbsp;    @PutMapping(value = &quot;/{id}&quot;, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+<i class="no-highlight">136</i>&nbsp;                                 consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+<i class="no-highlight">137</i>&nbsp;    public ResponseEntity&lt;UserResponse&gt; updateUser(@PathVariable(&quot;id&quot;) String userId,
+<i class="no-highlight">138</i>&nbsp;                                                   @RequestBody UserUpdateRequest request) {
+<i class="no-highlight">139</i>&nbsp;
+<b class="nc"><i class="no-highlight">140</i>&nbsp;        UserDto userDTO = modelMapper.map(request, UserDto.class);</b>
+<i class="no-highlight">141</i>&nbsp;
+<b class="nc"><i class="no-highlight">142</i>&nbsp;        UserDto updatedUser = userService.updateUser(userId, userDTO);</b>
+<i class="no-highlight">143</i>&nbsp;
+<b class="nc"><i class="no-highlight">144</i>&nbsp;        UserResponse response = modelMapper.map(updatedUser, UserResponse.class);</b>
+<i class="no-highlight">145</i>&nbsp;
+<b class="nc"><i class="no-highlight">146</i>&nbsp;        return ResponseEntity.status(HttpStatus.OK).body(response);</b>
+<i class="no-highlight">147</i>&nbsp;    }
+<i class="no-highlight">148</i>&nbsp;
+<i class="no-highlight">149</i>&nbsp;    @DeleteMapping(value = &quot;/{id}&quot;, produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+<i class="no-highlight">150</i>&nbsp;    public ResponseEntity&lt;Void&gt; deleteUser(@PathVariable(&quot;id&quot;) String userId) {
+<b class="nc"><i class="no-highlight">151</i>&nbsp;        userService.deleteUser(userId);</b>
+<i class="no-highlight">152</i>&nbsp;
+<b class="nc"><i class="no-highlight">153</i>&nbsp;        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();</b>
+<i class="no-highlight">154</i>&nbsp;    }
+<i class="no-highlight">155</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-05-30 16:44</div>
+</div>
+</body>
+</html>
