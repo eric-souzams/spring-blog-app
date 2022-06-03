@@ -18,7 +18,6 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +27,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.support.WithAnonymousUser;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -45,9 +36,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -187,7 +176,8 @@ public class UserControllerTest {
         //given
         List<AddressDto> addresses = List.of(addressDto);
         List<AddressResponse> addressesResponse = List.of(addressResponse);
-        Type listType = new TypeToken<List<AddressResponse>>() {}.getType();
+        Type listType = new TypeToken<List<AddressResponse>>() {
+        }.getType();
 
         when(userService.getUserAddresses(anyString())).thenReturn(addresses);
         when(modelMapper.map(addresses, listType)).thenReturn(addressesResponse);
@@ -297,7 +287,8 @@ public class UserControllerTest {
         //given
         List<UserDto> users = List.of(userDto);
         List<UserResponse> usersResponse = List.of(userResponse);
-        Type listType = new TypeToken<List<UserResponse>>() {}.getType();
+        Type listType = new TypeToken<List<UserResponse>>() {
+        }.getType();
 
         when(userService.getAllUsers(anyInt(), anyInt())).thenReturn(users);
         when(jwtService.isValidToken(anyString())).thenReturn(true);
