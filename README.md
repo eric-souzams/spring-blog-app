@@ -4,6 +4,7 @@
 
 <p align="center">
   <a href="#routes">Routes</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#documentation">Documentation</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#coverage">Coverage</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#building">Building</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
@@ -27,7 +28,7 @@
 | DELETE | http://localhost:8080/api/v1/users/{userID}                         | Delete User                    |
 
 
-## Routes
+## Documentation
 | URL                                         | Description          |
 |---------------------------------------------|----------------------|
 | http://localhost:8080/swagger-ui/index.html | Visual Documentation |
