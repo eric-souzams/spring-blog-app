@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > ResetPasswordTokenRepository</title>
+  <title>Coverage Report > JwtService</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -17,10 +17,10 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">io.blog.springblogapp.repository</a>
+    <a href="../index.html">io.blog.springblogapp.service</a>
 </div>
 
-<h1>Coverage Summary for Class: ResetPasswordTokenRepository (io.blog.springblogapp.repository)</h1>
+<h1>Coverage Summary for Class: JwtService (io.blog.springblogapp.service)</h1>
 
 <table class="coverageStats">
 
@@ -28,16 +28,13 @@ Current scope:     <a href="../../index.html">all classes</a>
   <th class="name">Class</th>
 </tr>
   <tr>
-    <td class="name">ResetPasswordTokenRepository$MockitoMock$1050664058</td>
+    <td class="name">JwtService$MockitoMock$92287603</td>
   </tr>
   <tr>
-    <td class="name">ResetPasswordTokenRepository$MockitoMock$1050664058$auxiliary$4aYbXnr1</td>
+    <td class="name">JwtService$MockitoMock$92287603$auxiliary$6prEP0gp</td>
   </tr>
   <tr>
-    <td class="name">ResetPasswordTokenRepository$MockitoMock$1050664058$auxiliary$Psb4tfkn</td>
-  </tr>
-  <tr>
-    <td class="name">ResetPasswordTokenRepository$MockitoMock$1050664058$auxiliary$ZLnzniw1</td>
+    <td class="name">JwtService$MockitoMock$92287603$auxiliary$rmYTgZa7</td>
   </tr>
 <tr>
   <td class="name"><strong>Total</strong></td>
@@ -49,19 +46,26 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package io.blog.springblogapp.repository;
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package io.blog.springblogapp.service;
 <i class="no-highlight">2</i>&nbsp;
-<i class="no-highlight">3</i>&nbsp;import io.blog.springblogapp.model.entity.ResetPasswordToken;
-<i class="no-highlight">4</i>&nbsp;import org.springframework.data.jpa.repository.JpaRepository;
+<i class="no-highlight">3</i>&nbsp;import io.blog.springblogapp.dto.UserDto;
+<i class="no-highlight">4</i>&nbsp;import io.jsonwebtoken.Claims;
 <i class="no-highlight">5</i>&nbsp;
-<i class="no-highlight">6</i>&nbsp;import java.util.Optional;
-<i class="no-highlight">7</i>&nbsp;import java.util.UUID;
-<i class="no-highlight">8</i>&nbsp;
-<i class="no-highlight">9</i>&nbsp;public interface ResetPasswordTokenRepository extends JpaRepository&lt;ResetPasswordToken, UUID&gt; {
-<i class="no-highlight">10</i>&nbsp;
-<i class="no-highlight">11</i>&nbsp;    Optional&lt;ResetPasswordToken&gt; findByToken(String token);
-<i class="no-highlight">12</i>&nbsp;
-<i class="no-highlight">13</i>&nbsp;}
+<i class="no-highlight">6</i>&nbsp;public interface JwtService {
+<i class="no-highlight">7</i>&nbsp;
+<i class="no-highlight">8</i>&nbsp;    boolean isValidToken(String token);
+<i class="no-highlight">9</i>&nbsp;
+<i class="no-highlight">10</i>&nbsp;    Claims getClaims(String token);
+<i class="no-highlight">11</i>&nbsp;
+<i class="no-highlight">12</i>&nbsp;    String getUsername(String token);
+<i class="no-highlight">13</i>&nbsp;
+<i class="no-highlight">14</i>&nbsp;    String generateToken(UserDto user);
+<i class="no-highlight">15</i>&nbsp;
+<i class="no-highlight">16</i>&nbsp;    String generateEmailTokenValidation(UserDto user);
+<i class="no-highlight">17</i>&nbsp;
+<i class="no-highlight">18</i>&nbsp;    String generateResetPasswordToken(String userId);
+<i class="no-highlight">19</i>&nbsp;
+<i class="no-highlight">20</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -88,7 +92,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-05-30 16:44</div>
+    <div style="float:right;">generated on 2022-06-02 21:17</div>
 </div>
 </body>
 </html>

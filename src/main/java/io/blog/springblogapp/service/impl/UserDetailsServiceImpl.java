@@ -1,4 +1,4 @@
-package io.blog.springblogapp.service;
+package io.blog.springblogapp.service.impl;
 
 import io.blog.springblogapp.model.entity.UserEntity;
 import io.blog.springblogapp.repository.UserRepository;

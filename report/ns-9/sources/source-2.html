@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > UserResponse</title>
+  <title>Coverage Report > WebSecurityConfig</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -17,18 +17,15 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">io.blog.springblogapp.model.response</a>
+    <a href="../index.html">io.blog.springblogapp.security</a>
 </div>
 
-<h1>Coverage Summary for Class: UserResponse (io.blog.springblogapp.model.response)</h1>
+<h1>Coverage Summary for Class: WebSecurityConfig (io.blog.springblogapp.security)</h1>
 
 <table class="coverageStats">
+
 <tr>
   <th class="name">Class</th>
-<th class="coverageStat 
-">
-  Class, %
-</th>
 <th class="coverageStat 
 ">
   Method, %
@@ -39,33 +36,46 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">UserResponse</td>
+  <td class="name">WebSecurityConfig</td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/1)
+    (5/5)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    0%
+    100%
   </span>
   <span class="absValue">
-    (0/8)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    0%
-  </span>
-  <span class="absValue">
-    (0/8)
+    (24/24)
   </span>
 </td>
 </tr>
-
+  <tr>
+    <td class="name">WebSecurityConfig$$EnhancerBySpringCGLIB$$4e8afa7d</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (24/24)
+  </span>
+</td>
+</tr>
 </table>
 
 <br/>
@@ -73,32 +83,67 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package io.blog.springblogapp.model.response;
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package io.blog.springblogapp.security;
 <i class="no-highlight">2</i>&nbsp;
-<i class="no-highlight">3</i>&nbsp;import lombok.AllArgsConstructor;
-<i class="no-highlight">4</i>&nbsp;import lombok.Getter;
-<i class="no-highlight">5</i>&nbsp;import lombok.NoArgsConstructor;
-<i class="no-highlight">6</i>&nbsp;import lombok.Setter;
-<i class="no-highlight">7</i>&nbsp;
-<i class="no-highlight">8</i>&nbsp;import java.util.List;
-<i class="no-highlight">9</i>&nbsp;
-<i class="no-highlight">10</i>&nbsp;@Getter
-<b class="nc"><i class="no-highlight">11</i>&nbsp;@Setter</b>
-<b class="nc"><i class="no-highlight">12</i>&nbsp;@AllArgsConstructor</b>
-<b class="nc"><i class="no-highlight">13</i>&nbsp;@NoArgsConstructor</b>
-<i class="no-highlight">14</i>&nbsp;public class UserResponse {
-<i class="no-highlight">15</i>&nbsp;        
-<b class="nc"><i class="no-highlight">16</i>&nbsp;    private String userId;</b>
-<i class="no-highlight">17</i>&nbsp;
-<b class="nc"><i class="no-highlight">18</i>&nbsp;    private String firstName;</b>
+<i class="no-highlight">3</i>&nbsp;import io.blog.springblogapp.security.filters.AuthenticationFilter;
+<i class="no-highlight">4</i>&nbsp;import io.blog.springblogapp.security.filters.AuthorizationFilter;
+<i class="no-highlight">5</i>&nbsp;import io.blog.springblogapp.service.JwtService;
+<i class="no-highlight">6</i>&nbsp;import io.blog.springblogapp.service.impl.UserDetailsServiceImpl;
+<i class="no-highlight">7</i>&nbsp;import lombok.AllArgsConstructor;
+<i class="no-highlight">8</i>&nbsp;import org.springframework.http.HttpMethod;
+<i class="no-highlight">9</i>&nbsp;import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+<i class="no-highlight">10</i>&nbsp;import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+<i class="no-highlight">11</i>&nbsp;import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+<i class="no-highlight">12</i>&nbsp;import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+<i class="no-highlight">13</i>&nbsp;import org.springframework.security.config.http.SessionCreationPolicy;
+<i class="no-highlight">14</i>&nbsp;import org.springframework.security.crypto.password.PasswordEncoder;
+<i class="no-highlight">15</i>&nbsp;
+<b class="fc"><i class="no-highlight">16</i>&nbsp;@AllArgsConstructor</b>
+<i class="no-highlight">17</i>&nbsp;@EnableWebSecurity
+<i class="no-highlight">18</i>&nbsp;public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 <i class="no-highlight">19</i>&nbsp;
-<b class="nc"><i class="no-highlight">20</i>&nbsp;    private String lastName;</b>
-<i class="no-highlight">21</i>&nbsp;
-<b class="nc"><i class="no-highlight">22</i>&nbsp;    private String email;</b>
+<i class="no-highlight">20</i>&nbsp;    private final UserDetailsServiceImpl userDetailsService;
+<i class="no-highlight">21</i>&nbsp;    private final PasswordEncoder passwordEncoder;
+<i class="no-highlight">22</i>&nbsp;    private final JwtService jwtService;
 <i class="no-highlight">23</i>&nbsp;
-<b class="nc"><i class="no-highlight">24</i>&nbsp;    private List&lt;AddressResponse&gt; addresses;</b>
-<i class="no-highlight">25</i>&nbsp;
-<i class="no-highlight">26</i>&nbsp;}
+<i class="no-highlight">24</i>&nbsp;    @Override
+<i class="no-highlight">25</i>&nbsp;    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+<b class="fc"><i class="no-highlight">26</i>&nbsp;        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);</b>
+<i class="no-highlight">27</i>&nbsp;    }
+<i class="no-highlight">28</i>&nbsp;
+<i class="no-highlight">29</i>&nbsp;    @Override
+<i class="no-highlight">30</i>&nbsp;    protected void configure(HttpSecurity http) throws Exception {
+<b class="fc"><i class="no-highlight">31</i>&nbsp;        http.csrf().disable()</b>
+<b class="fc"><i class="no-highlight">32</i>&nbsp;                .authorizeRequests()</b>
+<b class="fc"><i class="no-highlight">33</i>&nbsp;                    .antMatchers(HttpMethod.POST, SecurityConstants.LOGIN_URL).permitAll()</b>
+<b class="fc"><i class="no-highlight">34</i>&nbsp;                    .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()</b>
+<b class="fc"><i class="no-highlight">35</i>&nbsp;                    .antMatchers(HttpMethod.GET, SecurityConstants.VERIFICATION_EMAIL_URL).permitAll()</b>
+<b class="fc"><i class="no-highlight">36</i>&nbsp;                    .antMatchers(HttpMethod.POST, SecurityConstants.RESET_PASSWORD_URL).permitAll()</b>
+<b class="fc"><i class="no-highlight">37</i>&nbsp;                    .antMatchers(HttpMethod.POST, SecurityConstants.RESET_PASSWORD_UPDATE_URL).permitAll()</b>
+<b class="fc"><i class="no-highlight">38</i>&nbsp;                    .antMatchers(&quot;/h2-console/**&quot;).permitAll()</b>
+<b class="fc"><i class="no-highlight">39</i>&nbsp;                .anyRequest()</b>
+<b class="fc"><i class="no-highlight">40</i>&nbsp;                    .authenticated()</b>
+<b class="fc"><i class="no-highlight">41</i>&nbsp;                .and()</b>
+<b class="fc"><i class="no-highlight">42</i>&nbsp;                    .headers().frameOptions().disable()</b>
+<b class="fc"><i class="no-highlight">43</i>&nbsp;                .and()</b>
+<b class="fc"><i class="no-highlight">44</i>&nbsp;                    .sessionManagement()</b>
+<b class="fc"><i class="no-highlight">45</i>&nbsp;                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)</b>
+<b class="fc"><i class="no-highlight">46</i>&nbsp;                .and()</b>
+<b class="fc"><i class="no-highlight">47</i>&nbsp;                    .addFilter(getAuthenticationFilter())</b>
+<b class="fc"><i class="no-highlight">48</i>&nbsp;                    .addFilter(new AuthorizationFilter(authenticationManager(), getJwtService()));</b>
+<i class="no-highlight">49</i>&nbsp;    }
+<i class="no-highlight">50</i>&nbsp;
+<i class="no-highlight">51</i>&nbsp;    public AuthenticationFilter getAuthenticationFilter() throws Exception {
+<b class="fc"><i class="no-highlight">52</i>&nbsp;        final AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(), getJwtService());</b>
+<b class="fc"><i class="no-highlight">53</i>&nbsp;        authenticationFilter.setFilterProcessesUrl(SecurityConstants.LOGIN_URL);</b>
+<i class="no-highlight">54</i>&nbsp;
+<b class="fc"><i class="no-highlight">55</i>&nbsp;        return authenticationFilter;</b>
+<i class="no-highlight">56</i>&nbsp;    }
+<i class="no-highlight">57</i>&nbsp;
+<i class="no-highlight">58</i>&nbsp;    public JwtService getJwtService() {
+<b class="fc"><i class="no-highlight">59</i>&nbsp;        return jwtService;</b>
+<i class="no-highlight">60</i>&nbsp;    }
+<i class="no-highlight">61</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -125,7 +170,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-05-30 16:44</div>
+    <div style="float:right;">generated on 2022-06-02 21:17</div>
 </div>
 </body>
 </html>

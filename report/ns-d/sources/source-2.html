@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > ErrorMessages</title>
+  <title>Coverage Report > ResetPasswordTokenRepository</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -17,55 +17,31 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">io.blog.springblogapp.utils</a>
+    <a href="../index.html">io.blog.springblogapp.repository</a>
 </div>
 
-<h1>Coverage Summary for Class: ErrorMessages (io.blog.springblogapp.utils)</h1>
+<h1>Coverage Summary for Class: ResetPasswordTokenRepository (io.blog.springblogapp.repository)</h1>
 
 <table class="coverageStats">
+
 <tr>
   <th class="name">Class</th>
-<th class="coverageStat 
-">
-  Class, %
-</th>
-<th class="coverageStat 
-">
-  Method, %
-</th>
-<th class="coverageStat 
-">
-  Line, %
-</th>
 </tr>
+  <tr>
+    <td class="name">ResetPasswordTokenRepository$MockitoMock$751561473</td>
+  </tr>
+  <tr>
+    <td class="name">ResetPasswordTokenRepository$MockitoMock$751561473$auxiliary$ASA9iS4E</td>
+  </tr>
+  <tr>
+    <td class="name">ResetPasswordTokenRepository$MockitoMock$751561473$auxiliary$hMiMu24O</td>
+  </tr>
+  <tr>
+    <td class="name">ResetPasswordTokenRepository$MockitoMock$751561473$auxiliary$mEoe4728</td>
+  </tr>
 <tr>
-  <td class="name">ErrorMessages</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (1/1)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (3/3)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (17/17)
-  </span>
-</td>
+  <td class="name"><strong>Total</strong></td>
 </tr>
-
 </table>
 
 <br/>
@@ -73,33 +49,19 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package io.blog.springblogapp.utils;
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package io.blog.springblogapp.repository;
 <i class="no-highlight">2</i>&nbsp;
-<i class="no-highlight">3</i>&nbsp;import lombok.AllArgsConstructor;
-<i class="no-highlight">4</i>&nbsp;import lombok.Getter;
+<i class="no-highlight">3</i>&nbsp;import io.blog.springblogapp.model.entity.ResetPasswordToken;
+<i class="no-highlight">4</i>&nbsp;import org.springframework.data.jpa.repository.JpaRepository;
 <i class="no-highlight">5</i>&nbsp;
-<b class="fc"><i class="no-highlight">6</i>&nbsp;@Getter</b>
-<b class="fc"><i class="no-highlight">7</i>&nbsp;@AllArgsConstructor</b>
-<i class="no-highlight">8</i>&nbsp;public enum ErrorMessages {
-<i class="no-highlight">9</i>&nbsp;
-<b class="fc"><i class="no-highlight">10</i>&nbsp;    MISSING_REQUIRED_FIELD(&quot;Missing required field. Please check documentation for required fields&quot;),</b>
-<b class="fc"><i class="no-highlight">11</i>&nbsp;    RECORD_ALREADY_EXISTS(&quot;Record already exists&quot;),</b>
-<b class="fc"><i class="no-highlight">12</i>&nbsp;    INTERNAL_SERVER_ERROR(&quot;Internal server error&quot;),</b>
-<b class="fc"><i class="no-highlight">13</i>&nbsp;    NO_RECORD_FOUND_ID(&quot;Record with provided id is not found&quot;),</b>
-<b class="fc"><i class="no-highlight">14</i>&nbsp;    NO_RECORD_FOUND_USERNAME(&quot;Record with provided username not found&quot;),</b>
-<b class="fc"><i class="no-highlight">15</i>&nbsp;    AUTHENTICATION_FAILED(&quot;Wrong credentials&quot;),</b>
-<b class="fc"><i class="no-highlight">16</i>&nbsp;    COULD_NOT_UPDATE_RECORD(&quot;Could not update record&quot;),</b>
-<b class="fc"><i class="no-highlight">17</i>&nbsp;    COULD_NOT_DELETE_RECORD(&quot;Could not delete record&quot;),</b>
-<b class="fc"><i class="no-highlight">18</i>&nbsp;    ADDRESS_NOT_BELONG_USER(&quot;The address does not belong to the informed user&quot;),</b>
-<b class="fc"><i class="no-highlight">19</i>&nbsp;    INVALID_TOKEN_VALIDATION(&quot;The token provided is invalid or expired&quot;),</b>
-<b class="fc"><i class="no-highlight">20</i>&nbsp;    EMAIL_ALREADY_VALIDATED(&quot;Email address already has been validated&quot;),</b>
-<b class="fc"><i class="no-highlight">21</i>&nbsp;    NO_TOKEN_FOUND(&quot;Token provided is not found&quot;),</b>
-<b class="fc"><i class="no-highlight">22</i>&nbsp;    INVALID_PASSWORD_RESET(&quot;Password provided is not equals&quot;),</b>
-<b class="fc"><i class="no-highlight">23</i>&nbsp;    EMAIL_ADDRESS_NOT_VERIFIED(&quot;Email address could not be verified&quot;);</b>
-<i class="no-highlight">24</i>&nbsp;
-<b class="fc"><i class="no-highlight">25</i>&nbsp;    private final String errorMessage;</b>
-<i class="no-highlight">26</i>&nbsp;
-<i class="no-highlight">27</i>&nbsp;}
+<i class="no-highlight">6</i>&nbsp;import java.util.Optional;
+<i class="no-highlight">7</i>&nbsp;import java.util.UUID;
+<i class="no-highlight">8</i>&nbsp;
+<i class="no-highlight">9</i>&nbsp;public interface ResetPasswordTokenRepository extends JpaRepository&lt;ResetPasswordToken, UUID&gt; {
+<i class="no-highlight">10</i>&nbsp;
+<i class="no-highlight">11</i>&nbsp;    Optional&lt;ResetPasswordToken&gt; findByToken(String token);
+<i class="no-highlight">12</i>&nbsp;
+<i class="no-highlight">13</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -126,7 +88,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-05-30 16:44</div>
+    <div style="float:right;">generated on 2022-06-02 21:17</div>
 </div>
 </body>
 </html>

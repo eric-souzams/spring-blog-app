@@ -1,7 +1,8 @@
-package io.blog.springblogapp.service;
+package io.blog.springblogapp.service.impl;
 
 import io.blog.springblogapp.dto.UserDto;
 import io.blog.springblogapp.security.SecurityConstants;
+import io.blog.springblogapp.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -51,7 +52,7 @@ public class JwtServiceImpl implements JwtService {
         return Jwts.builder()
                 .setSubject(user.getEmail())
                 .claim("userId", user.getUserId())
-                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
+                .setExpiration(new Date(System.currentTimeMillis() + 1))
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.getSecretToken())
                 .compact();
     }

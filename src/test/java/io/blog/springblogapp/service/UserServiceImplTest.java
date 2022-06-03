@@ -13,6 +13,7 @@ import io.blog.springblogapp.model.request.ResetPasswordUpdateRequest;
 import io.blog.springblogapp.repository.AddressRepository;
 import io.blog.springblogapp.repository.ResetPasswordTokenRepository;
 import io.blog.springblogapp.repository.UserRepository;
+import io.blog.springblogapp.service.impl.UserServiceImpl;
 import io.blog.springblogapp.utils.ErrorMessages;
 import io.blog.springblogapp.utils.Utils;
 import org.junit.jupiter.api.BeforeEach;

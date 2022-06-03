@@ -2,6 +2,7 @@ package io.blog.springblogapp.service;
 
 import io.blog.springblogapp.model.entity.UserEntity;
 import io.blog.springblogapp.repository.UserRepository;
+import io.blog.springblogapp.service.impl.UserDetailsServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

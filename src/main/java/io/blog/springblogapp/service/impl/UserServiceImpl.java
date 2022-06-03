@@ -1,4 +1,4 @@
-package io.blog.springblogapp.service;
+package io.blog.springblogapp.service.impl;
 
 import io.blog.springblogapp.dto.AddressDto;
 import io.blog.springblogapp.dto.UserDto;

@@ -3,26 +3,22 @@ package io.blog.springblogapp.security;
 import io.blog.springblogapp.security.filters.AuthenticationFilter;
 import io.blog.springblogapp.security.filters.AuthorizationFilter;
 import io.blog.springblogapp.service.JwtService;
+import io.blog.springblogapp.service.impl.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @AllArgsConstructor
-@Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
     private final PasswordEncoder passwordEncoder;
-
     private final JwtService jwtService;
 
     @Override
@@ -39,13 +35,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, SecurityConstants.VERIFICATION_EMAIL_URL).permitAll()
                     .antMatchers(HttpMethod.POST, SecurityConstants.RESET_PASSWORD_URL).permitAll()
                     .antMatchers(HttpMethod.POST, SecurityConstants.RESET_PASSWORD_UPDATE_URL).permitAll()
-                .anyRequest().authenticated()
+                    .antMatchers("/h2-console/**").permitAll()
+                .anyRequest()
+                    .authenticated()
+                .and()
+                    .headers().frameOptions().disable()
                 .and()
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .addFilter(getAuthenticationFilter())
-                    .addFilterBefore(new AuthorizationFilter(authenticationManager(), getJwtService()), UsernamePasswordAuthenticationFilter.class);
+                    .addFilter(new AuthorizationFilter(authenticationManager(), getJwtService()));
     }
 
     public AuthenticationFilter getAuthenticationFilter() throws Exception {
