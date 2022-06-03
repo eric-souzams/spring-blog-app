@@ -27,6 +27,15 @@
 | DELETE | http://localhost:8080/api/v1/users/{userID}                         | Delete User                    |
 
 
+## Routes
+| URL                                         | Description          |
+|---------------------------------------------|----------------------|
+| http://localhost:8080/swagger-ui/index.html | Visual Documentation |
+| http://localhost:8080/v2/api-docs           | Api Documentation    |
+
+<img src="p2.jpg">
+
+
 ## Coverage
 <img src="p1.jpg">
 

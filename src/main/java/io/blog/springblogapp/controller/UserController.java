@@ -9,6 +9,9 @@ import io.blog.springblogapp.model.request.UserUpdateRequest;
 import io.blog.springblogapp.model.response.AddressResponse;
 import io.blog.springblogapp.model.response.UserResponse;
 import io.blog.springblogapp.service.UserService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -60,6 +63,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "${userController.authorizationHeader.description}", paramType = "header")
+    })
     @GetMapping(value = "/{id}/addresses", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public ResponseEntity<CollectionModel<AddressResponse>> getUserAddresses(@PathVariable("id") String userId) {
         List<AddressDto> foundAddresses = userService.getUserAddresses(userId);
@@ -82,6 +88,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "${userController.authorizationHeader.description}", paramType = "header")
+    })
     @GetMapping(value = "/{id}/addresses/{addressId}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public ResponseEntity<AddressResponse> getUserAddress(@PathVariable("id") String userId,
                                                           @PathVariable("addressId") String addressId) {
@@ -99,6 +108,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "${userController.authorizationHeader.description}", paramType = "header")
+    })
     @GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public ResponseEntity<UserResponse> getUser(@PathVariable("id") String userId) {
         UserDto foundUser = userService.getUserByUserId(userId);
@@ -108,6 +120,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "${userController.authorizationHeader.description}", paramType = "header")
+    })
     @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public ResponseEntity<List<UserResponse>> getAllUsers(@RequestParam(value = "page", defaultValue = "0") int page,
                                                           @RequestParam(value = "limit", defaultValue = "15") int limit) {
@@ -132,6 +147,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "${userController.authorizationHeader.description}", paramType = "header")
+    })
     @PutMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
                                  consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public ResponseEntity<UserResponse> updateUser(@PathVariable("id") String userId,
@@ -146,6 +164,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "${userController.authorizationHeader.description}", paramType = "header")
+    })
     @DeleteMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public ResponseEntity<Void> deleteUser(@PathVariable("id") String userId) {
         userService.deleteUser(userId);
