@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 public class RoleRepositoryTest {
 
     @Autowired
@@ -30,20 +30,20 @@ public class RoleRepositoryTest {
     @Autowired
     TestEntityManager entityManager;
 
-    RoleEntity role;
 
     @BeforeEach
     void setUp() {
-        role = RoleEntity.builder().name(Roles.ROLE_ADMIN.name()).build();
+
     }
 
     @Test
     void test_find_by_role_name() {
         //given
+        RoleEntity role = RoleEntity.builder().name("ROLE_TEST").build();
         entityManager.persist(role);
 
         //act
-        Optional<RoleEntity> result = roleRepository.findByName(Roles.ROLE_ADMIN.name());
+        Optional<RoleEntity> result = roleRepository.findByName("ROLE_TEST");
 
         //assert
         assertThat(result).isNotNull();
