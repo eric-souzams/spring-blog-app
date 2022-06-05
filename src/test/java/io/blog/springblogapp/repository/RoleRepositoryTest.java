@@ -1,5 +1,6 @@
 package io.blog.springblogapp.repository;
 
+import io.blog.springblogapp.model.entity.AuthorityEntity;
 import io.blog.springblogapp.model.entity.RoleEntity;
 import io.blog.springblogapp.model.enums.Roles;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 
@@ -30,10 +33,12 @@ public class RoleRepositoryTest {
     TestEntityManager entityManager;
 
     RoleEntity role;
+    AuthorityEntity authority;
 
     @BeforeEach
     void setUp() {
-        role = RoleEntity.builder().name(Roles.ROLE_USER.name()).authorities(new HashSet<>()).build();
+        authority = AuthorityEntity.builder().name("READ_AUTHORITY").build();
+        role = RoleEntity.builder().name(Roles.ROLE_USER.name()).authorities(Collections.singletonList(authority)).build();
     }
 
     @Test
