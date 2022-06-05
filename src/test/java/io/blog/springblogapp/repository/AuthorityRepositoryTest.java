@@ -31,16 +31,17 @@ public class AuthorityRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        authority = AuthorityEntity.builder().name("READ_AUTHORITY").build();
+        authority = AuthorityEntity.builder().build();
     }
 
     @Test
     void test_find_by_authority_name() {
         //given
+        authority.setName("TEST_NEW_AUTH");
         entityManager.persist(authority);
 
         //act
-        Optional<AuthorityEntity> result = authorityRepository.findByName("READ_AUTHORITY");
+        Optional<AuthorityEntity> result = authorityRepository.findByName("TEST_NEW_AUTH");
 
         //assert
         assertThat(result).isNotNull();
