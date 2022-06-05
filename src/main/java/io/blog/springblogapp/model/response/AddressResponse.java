@@ -7,6 +7,7 @@ import org.springframework.hateoas.RepresentationModel;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class AddressResponse extends RepresentationModel<AddressResponse> {
         
     private String addressId;

@@ -1,5 +1,7 @@
 package io.blog.springblogapp.security.filters;
 
+import io.blog.springblogapp.model.entity.UserEntity;
+import io.blog.springblogapp.repository.UserRepository;
 import io.blog.springblogapp.security.SecurityConstants;
 import io.blog.springblogapp.service.JwtService;
 import io.jsonwebtoken.Jwts;
@@ -14,14 +16,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class AuthorizationFilter extends BasicAuthenticationFilter {
 
     private final JwtService jwtService;
+    private final UserRepository userRepository;
 
-    public AuthorizationFilter(AuthenticationManager authenticationManager, JwtService jwtService) {
+    public AuthorizationFilter(AuthenticationManager authenticationManager, JwtService jwtService, UserRepository userRepository) {
         super(authenticationManager);
         this.jwtService = jwtService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -51,14 +56,12 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 
         String user = jwtService.getUsername(token);
 
-        if (!jwtService.isValidToken(token)) {
-            return null;
-        }
+        if (!jwtService.isValidToken(token)) return null;
+        if (user == null) return null;
 
-        if (user == null) {
-            return null;
-        }
+        Optional<UserEntity> foundUser = userRepository.findByEmail(user);
+        if (foundUser.isEmpty()) return null;
 
-        return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+        return new UsernamePasswordAuthenticationToken(user, null, foundUser.get().getAuthorities());
     }
 }

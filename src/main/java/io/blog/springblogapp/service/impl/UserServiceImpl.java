@@ -8,10 +8,13 @@ import io.blog.springblogapp.exception.BusinessException;
 import io.blog.springblogapp.exception.UserNotFoundException;
 import io.blog.springblogapp.model.entity.AddressEntity;
 import io.blog.springblogapp.model.entity.ResetPasswordToken;
+import io.blog.springblogapp.model.entity.RoleEntity;
 import io.blog.springblogapp.model.entity.UserEntity;
+import io.blog.springblogapp.model.enums.Roles;
 import io.blog.springblogapp.model.request.ResetPasswordUpdateRequest;
 import io.blog.springblogapp.repository.AddressRepository;
 import io.blog.springblogapp.repository.ResetPasswordTokenRepository;
+import io.blog.springblogapp.repository.RoleRepository;
 import io.blog.springblogapp.repository.UserRepository;
 import io.blog.springblogapp.service.JwtService;
 import io.blog.springblogapp.service.UserService;
@@ -28,9 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -43,6 +44,7 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
     private ModelMapper modelMapper;
     private JwtService jwtService;
+    private RoleRepository roleRepository;
 
     @Transactional
     @Override
@@ -61,6 +63,12 @@ public class UserServiceImpl implements UserService {
         user.setEncryptedPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setEmailVerificationToken(jwtService.generateEmailTokenValidation(userDTO));
         user.setEmailVerificationStatus(false);
+
+        Collection<RoleEntity> roles = new HashSet<>();
+        Optional<RoleEntity> role = roleRepository.findByName(Roles.ROLE_USER.name());
+        role.ifPresent(roles::add);
+
+        user.setRoles(roles);
 
         UserEntity savedUser = userRepository.save(user);
 

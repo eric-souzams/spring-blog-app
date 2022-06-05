@@ -1,5 +1,6 @@
 package io.blog.springblogapp.security;
 
+import io.blog.springblogapp.repository.UserRepository;
 import io.blog.springblogapp.security.filters.AuthenticationFilter;
 import io.blog.springblogapp.security.filters.AuthorizationFilter;
 import io.blog.springblogapp.service.JwtService;
@@ -20,6 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsServiceImpl userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final UserRepository userRepository;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -37,6 +39,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.POST, SecurityConstants.RESET_PASSWORD_UPDATE_URL).permitAll()
                     .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
                     .antMatchers("/h2-console/**").permitAll()
+
+                    .antMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasRole("ADMIN")
+
                 .anyRequest()
                     .authenticated()
                 .and()
@@ -46,17 +51,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .addFilter(getAuthenticationFilter())
-                    .addFilter(new AuthorizationFilter(authenticationManager(), getJwtService()));
+                    .addFilter(new AuthorizationFilter(authenticationManager(), jwtService, userRepository));
     }
 
     public AuthenticationFilter getAuthenticationFilter() throws Exception {
-        final AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(), getJwtService());
+        final AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager(), jwtService);
         authenticationFilter.setFilterProcessesUrl(SecurityConstants.LOGIN_URL);
 
         return authenticationFilter;
-    }
-
-    public JwtService getJwtService() {
-        return jwtService;
     }
 }

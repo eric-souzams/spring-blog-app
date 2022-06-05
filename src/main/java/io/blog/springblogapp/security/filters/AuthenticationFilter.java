@@ -3,6 +3,7 @@ package io.blog.springblogapp.security.filters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.blog.springblogapp.SpringApplicationContext;
 import io.blog.springblogapp.dto.UserDto;
+import io.blog.springblogapp.model.entity.UserEntity;
 import io.blog.springblogapp.model.request.UserLoginRequest;
 import io.blog.springblogapp.security.SecurityConstants;
 import io.blog.springblogapp.service.JwtService;
@@ -52,7 +53,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                                             FilterChain chain, Authentication authResult)
                                             throws IOException, ServletException {
 
-        String username = ((User) authResult.getPrincipal()).getUsername();
+        String username = ((UserEntity) authResult.getPrincipal()).getUsername();
 
         UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
         UserDto userDto = userService.getUser(username);

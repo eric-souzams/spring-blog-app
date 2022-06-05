@@ -3,6 +3,7 @@ package io.blog.springblogapp.dto;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,5 +36,7 @@ public class UserDto implements Serializable {
     private Boolean emailVerificationStatus = false;
 
     private List<AddressDto> addresses;
+
+    private Collection<String> roles;
 
 }

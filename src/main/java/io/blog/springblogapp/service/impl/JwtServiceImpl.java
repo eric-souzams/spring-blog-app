@@ -52,7 +52,7 @@ public class JwtServiceImpl implements JwtService {
         return Jwts.builder()
                 .setSubject(user.getEmail())
                 .claim("userId", user.getUserId())
-                .setExpiration(new Date(System.currentTimeMillis() + 1))
+                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.getSecretToken())
                 .compact();
     }
