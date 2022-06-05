@@ -35,7 +35,7 @@ public class AuthorityRepositoryTest {
     }
 
     @Test
-    void test_find_by_name() {
+    void test_find_by_authority_name() {
         //given
         entityManager.persist(authority);
 

@@ -13,9 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,16 +31,14 @@ public class RoleRepositoryTest {
     TestEntityManager entityManager;
 
     RoleEntity role;
-    AuthorityEntity authority;
 
     @BeforeEach
     void setUp() {
-        authority = AuthorityEntity.builder().name("WRITE_AUTHORITY").build();
-        role = RoleEntity.builder().name(Roles.ROLE_ADMIN.name()).authorities(Collections.singletonList(authority)).build();
+        role = RoleEntity.builder().name(Roles.ROLE_ADMIN.name()).build();
     }
 
     @Test
-    void test_find_by_name() {
+    void test_find_by_role_name() {
         //given
         entityManager.persist(role);
 

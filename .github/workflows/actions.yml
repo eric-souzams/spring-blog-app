@@ -19,10 +19,7 @@ jobs:
         java-version: '11'
         distribution: 'adopt'
         cache: maven
-        
-    - name: Build
-      run: |
-        mvn -B package --file pom.xml
+
     - name: Tests with Junit
       run: |
         mvn test
