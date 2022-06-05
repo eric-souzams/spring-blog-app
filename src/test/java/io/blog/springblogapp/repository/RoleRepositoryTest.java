@@ -37,8 +37,8 @@ public class RoleRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        authority = AuthorityEntity.builder().name("READ_AUTHORITY").build();
-        role = RoleEntity.builder().name(Roles.ROLE_USER.name()).authorities(Collections.singletonList(authority)).build();
+        authority = AuthorityEntity.builder().name("WRITE_AUTHORITY").build();
+        role = RoleEntity.builder().name(Roles.ROLE_ADMIN.name()).authorities(Collections.singletonList(authority)).build();
     }
 
     @Test
@@ -47,7 +47,7 @@ public class RoleRepositoryTest {
         entityManager.persist(role);
 
         //act
-        Optional<RoleEntity> result = roleRepository.findByName(Roles.ROLE_USER.name());
+        Optional<RoleEntity> result = roleRepository.findByName(Roles.ROLE_ADMIN.name());
 
         //assert
         assertThat(result).isNotNull();
