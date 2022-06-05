@@ -3,9 +3,8 @@ package io.blog.springblogapp.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.blog.springblogapp.dto.AddressDto;
 import io.blog.springblogapp.dto.UserDto;
-import io.blog.springblogapp.model.entity.AddressEntity;
-import io.blog.springblogapp.model.entity.ResetPasswordToken;
-import io.blog.springblogapp.model.entity.UserEntity;
+import io.blog.springblogapp.model.entity.*;
+import io.blog.springblogapp.model.enums.Roles;
 import io.blog.springblogapp.model.request.*;
 import io.blog.springblogapp.model.response.AddressResponse;
 import io.blog.springblogapp.model.response.UserResponse;
@@ -27,8 +26,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -36,8 +36,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.lang.reflect.Type;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -100,13 +99,21 @@ public class UserControllerTest {
     ResetPasswordToken resetPasswordToken;
     ResetPasswordUpdateRequest resetPasswordUpdateRequest;
     ResetPasswordRequest resetPasswordRequest;
-
-
-    @MockBean
-    Authentication authentication;
+    AuthorityEntity readAuthority;
+    AuthorityEntity writeAuthority;
+    AuthorityEntity deleteAuthority;
+    RoleEntity roleUser;
+    RoleEntity roleAdmin;
 
     @BeforeEach
     void setUp() {
+        readAuthority = AuthorityEntity.builder().name("READ_AUTHORITY").build();
+        writeAuthority = AuthorityEntity.builder().name("WRITE_AUTHORITY").build();
+        deleteAuthority = AuthorityEntity.builder().name("DELETE_AUTHORITY").build();
+
+        roleUser = RoleEntity.builder().name(Roles.ROLE_USER.name()).authorities(Arrays.asList(readAuthority, writeAuthority)).build();
+        roleAdmin = RoleEntity.builder().name(Roles.ROLE_ADMIN.name()).authorities(Arrays.asList(readAuthority, writeAuthority, deleteAuthority)).build();
+
         user = UserEntity.builder()
                 .id(UUID.fromString(ID)).userId(PUBLIC_USER_ID).firstName(FIRST_NAME).lastName(LAST_NAME)
                 .email(EMAIL).encryptedPassword(ENCRYPTED_PASSWORD).build();
@@ -150,6 +157,8 @@ public class UserControllerTest {
     @Test
     void test_get_user_address() throws Exception {
         //given
+        user.setRoles(Collections.singletonList(roleUser));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(userService.getUserAddress(anyString(), anyString())).thenReturn(addressDto);
         when(modelMapper.map(addressDto, AddressResponse.class)).thenReturn(addressResponse);
         when(jwtService.isValidToken(anyString())).thenReturn(true);
@@ -176,12 +185,13 @@ public class UserControllerTest {
         //given
         List<AddressDto> addresses = List.of(addressDto);
         List<AddressResponse> addressesResponse = List.of(addressResponse);
-        Type listType = new TypeToken<List<AddressResponse>>() {
-        }.getType();
+        Type listType = new TypeToken<List<AddressResponse>>() {}.getType();
 
         when(userService.getUserAddresses(anyString())).thenReturn(addresses);
         when(modelMapper.map(addresses, listType)).thenReturn(addressesResponse);
 
+        user.setRoles(Collections.singletonList(roleUser));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(jwtService.isValidToken(anyString())).thenReturn(true);
         when(jwtService.getUsername(anyString())).thenReturn(EMAIL);
 
@@ -207,6 +217,8 @@ public class UserControllerTest {
         List<AddressResponse> addresses = List.of(addressResponse);
         userResponse.setAddresses(addresses);
 
+        user.setRoles(Collections.singletonList(roleUser));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(userService.getUserByUserId(anyString())).thenReturn(userDto);
         when(modelMapper.map(userDto, UserResponse.class)).thenReturn(userResponse);
         when(jwtService.isValidToken(anyString())).thenReturn(true);
@@ -287,9 +299,10 @@ public class UserControllerTest {
         //given
         List<UserDto> users = List.of(userDto);
         List<UserResponse> usersResponse = List.of(userResponse);
-        Type listType = new TypeToken<List<UserResponse>>() {
-        }.getType();
+        Type listType = new TypeToken<List<UserResponse>>() {}.getType();
 
+        user.setRoles(Collections.singletonList(roleUser));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(userService.getAllUsers(anyInt(), anyInt())).thenReturn(users);
         when(jwtService.isValidToken(anyString())).thenReturn(true);
         when(jwtService.getUsername(anyString())).thenReturn(EMAIL);
@@ -345,6 +358,8 @@ public class UserControllerTest {
         when(userService.updateUser(anyString(), any())).thenReturn(userDto);
         when(modelMapper.map(userDto, UserResponse.class)).thenReturn(userResponse);
 
+        user.setRoles(Collections.singletonList(roleUser));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(jwtService.isValidToken(anyString())).thenReturn(true);
         when(jwtService.getUsername(anyString())).thenReturn(EMAIL);
 
@@ -370,6 +385,8 @@ public class UserControllerTest {
         //given
         String content = new ObjectMapper().writeValueAsString(userCreateRequest);
 
+        user.setRoles(Collections.singletonList(roleAdmin));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(jwtService.isValidToken(anyString())).thenReturn(true);
         when(jwtService.getUsername(anyString())).thenReturn(EMAIL);
 

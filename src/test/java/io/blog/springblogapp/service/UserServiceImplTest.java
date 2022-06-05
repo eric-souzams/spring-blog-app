@@ -12,6 +12,7 @@ import io.blog.springblogapp.model.entity.UserEntity;
 import io.blog.springblogapp.model.request.ResetPasswordUpdateRequest;
 import io.blog.springblogapp.repository.AddressRepository;
 import io.blog.springblogapp.repository.ResetPasswordTokenRepository;
+import io.blog.springblogapp.repository.RoleRepository;
 import io.blog.springblogapp.repository.UserRepository;
 import io.blog.springblogapp.service.impl.UserServiceImpl;
 import io.blog.springblogapp.utils.ErrorMessages;
@@ -78,6 +79,8 @@ public class UserServiceImplTest {
     JwtService jwtService;
     @MockBean
     ModelMapper modelMapper;
+    @MockBean
+    RoleRepository roleRepository;
 
     UserEntity user;
     UserDto userDto;
