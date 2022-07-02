@@ -22,6 +22,7 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -41,9 +42,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
+@SpringBootTest
 @ActiveProfiles("test")
-@WebMvcTest(controllers = UserController.class)
 @AutoConfigureMockMvc
 public class UserControllerTest {
 
@@ -70,11 +70,11 @@ public class UserControllerTest {
     @MockBean
     UserServiceImpl userService;
     @MockBean
+    ModelMapper modelMapper;
+    @MockBean
     UserRepository userRepository;
     @MockBean
     UserDetailsServiceImpl userDetailsService;
-    @MockBean
-    ModelMapper modelMapper;
     @MockBean
     PasswordEncoder passwordEncoder;
     @MockBean
@@ -156,11 +156,14 @@ public class UserControllerTest {
     void test_get_user_address() throws Exception {
         //given
         user.setRoles(Collections.singletonList(roleUser));
+
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
         when(userService.getUserAddress(anyString(), anyString())).thenReturn(addressDto);
-        when(modelMapper.map(addressDto, AddressResponse.class)).thenReturn(addressResponse);
         when(jwtService.isValidToken(anyString())).thenReturn(true);
         when(jwtService.getUsername(anyString())).thenReturn(EMAIL);
+
+        when(userService.getUserAddress(anyString(), anyString())).thenReturn(addressDto);
+        when(modelMapper.map(addressDto, AddressResponse.class)).thenReturn(addressResponse);
 
         //act
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
@@ -182,7 +185,7 @@ public class UserControllerTest {
     void test_get_user_addresses() throws Exception {
         //given
         List<AddressDto> addresses = List.of(addressDto);
-        List<AddressResponse> addressesResponse = List.of(addressResponse);
+        List<AddressResponse> addressesResponse = List.of(addressResponse, addressResponse);
         Type listType = new TypeToken<List<AddressResponse>>() {}.getType();
 
         when(userService.getUserAddresses(anyString())).thenReturn(addresses);
@@ -203,8 +206,8 @@ public class UserControllerTest {
         //assert
         mvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("_embedded.addressResponseList.[0].addressId").value(PUBLIC_ADDRESS_ID))
-                .andExpect(jsonPath("_embedded.addressResponseList.[0].type").value(TYPE));
+                .andExpect(jsonPath("content.[0].addressId").value(PUBLIC_ADDRESS_ID))
+                .andExpect(jsonPath("content.[0].type").value(TYPE));
     }
 
     //throw
